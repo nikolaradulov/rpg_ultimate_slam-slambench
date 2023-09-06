@@ -1,5 +1,6 @@
-project(imp_bridge_ros)
 cmake_minimum_required(VERSION 2.8.0)
+project(imp_bridge_ros)
+
 
 find_package(catkin_simple REQUIRED)
 catkin_simple(ALL_DEPS_REQUIRED)

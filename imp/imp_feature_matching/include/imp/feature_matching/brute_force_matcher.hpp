@@ -1,6 +1,7 @@
 #pragma once
 
 #include <imp/feature_matching/matching_types.hpp>
+#include<numeric>
 
 namespace ze {
 
