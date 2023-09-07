@@ -1,9 +1,19 @@
 cmake_minimum_required(VERSION 2.8.0)
 
 project(ultimate_slam)
+find_package(yaml-cpp REQUIRED)
+find_package(opengv REQUIRED)
+if(opengv_FOUND)
+    message("OpenGV found: include: ${opengv_INCLUDE_DIR} lib: ${opengv_LIBRARIES}")
+endif(opengv_FOUND)
+message("YAML-CPP at ${YAML_CPP_INCLUDE_DIR} ${YAML_CPP_LIBRARIES}")
+find_package (glog 0.6.0 REQUIRED)
+if(glog_FOUND)
+    message("glog found")
+endif(glog_FOUND)
+include_directories(${EIGEN3_INCLUDE_DIR} ${SLAMBENCH_INCLUDE_DIRS} ${YAML_CPP_INCLUDE_DIR})
+set(CMAKE_CXX_FLAGS "-fPIC")
 
-include_directories(${EIGEN3_INCLUDE_DIR} ${SLAMBENCH_INCLUDE_DIRS})
-set(CMAKE_CXX_STANDARD 14)
 
 add_subdirectory(imp_bridge_opencv)
 add_subdirectory(imp_core)
@@ -25,7 +35,7 @@ add_subdirectory(ze_ceres_backend)
 add_subdirectory(ze_vio_ceres)
  
 add_library(${PROJECT_NAME}-original SHARED ultimate_slam-library.cpp)
-target_link_libraries(${PROJECT_NAME}-original PUBLIC "ze_vio_ceres")
+target_link_libraries(${PROJECT_NAME}-original PUBLIC "ze_vio_ceres" "ze_vio_common" "ze_vio_frontend" "${YAML_CPP_LIBRARIES}" "opengv" "glog::glog")
 SET(SLAMBENCH_C_WRAPPER	-Wl,--whole-archive -L${WRAPPER_PATH} slambench-c-wrapper	-Wl,--no-whole-archive)
 SET(NULL_FILE_PATH	${WRAPPER_PATH}/null.cpp)
 

@@ -70,6 +70,7 @@ public:
 private:
   std::shared_ptr<CameraRig> rig_;
   std::shared_ptr<FrontendBase> frontend_;
+  std::shared_ptr<DataProviderBase> data_provider_;
   std::shared_ptr<CameraImuSynchronizerBase> data_sync_;
 };
 

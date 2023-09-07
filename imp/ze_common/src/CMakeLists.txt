@@ -19,8 +19,8 @@ set(SOURCES
   )
 
 
-add_library(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-
+add_library(${PROJECT_NAME} ${SOURCES} )
+find_package(glog 0.6.0 REQUIRED)
 target_include_directories(${PROJECT_NAME} PUBLIC "${ze_common_SOURCE_DIR}/include" "{ze_common_SOURCE_DIR}/minkindr")
-target_link_libraries(${PROJECT_NAME} PUBLIC kindr)
+target_link_libraries(${PROJECT_NAME} PUBLIC "kindr" "glog::glog")
 

@@ -21,33 +21,34 @@ namespace ze {
 void VisualOdometry::initialize()
 {
   // Create frontend.
+  std::cout<<"[MESSAGE] Ultimate SLAM vo is initialising...\n";
   frontend_ = std::make_shared<FrontendVio>();
 }
 
 
 void VisualOdometry::startBlocking()
 {
-  VLOG(2) << "API Input: Start";
+ 
   frontend_->stage_ = FrontendStage::AttitudeEstimation;
 
 }
 
 void VisualOdometry::shutdown()
 {
-  VLOG(2) << "API Input: Shutdown";
-  CHECK(frontend_);
+ 
+  // CHECK(frontend_);
 
   frontend_->shutdown();
 }
 
 void VisualOdometry::pause()
 {
-  VLOG(2) << "API Input: Pause";
+
 }
 
 void VisualOdometry::registerResultCallback(const VisualOdometryCallback& cb)
 {
-  CHECK(frontend_);
+  // CHECK(frontend_);
   frontend_->registerResultCallback(cb);
 }
 

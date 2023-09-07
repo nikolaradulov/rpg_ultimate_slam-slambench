@@ -79,12 +79,12 @@ public:
 
   //! @name Interface
   //! @{
-  /// Uses only images.
+ // Uses only events
   void addData(const std::pair<int64_t, EventArrayPtr>& stamped_events,
                const std::vector<ImuStamps>& imu_stamps_vec,
                const std::vector<ImuAccGyrContainer>& imu_accgyr_vec);
 
-  /// Uses only events
+   /// Uses only images.
   void addData(const std::vector<std::pair<int64_t, ImageBase::Ptr>>&
                 stamped_images,
                const std::vector<ImuStamps>& imu_stamps_vec,

@@ -6,7 +6,6 @@ if (OPENMP_FOUND)
   add_definitions(-DUSE_OPENMP)
 endif ()
 
-set(CMAKE_CXX_STANDARD 14)
 
 set(SOURCES
   estimator.cpp
@@ -32,7 +31,7 @@ set(CERES_LIBRARIES
     ${CERES_LIBRARY_DIR}/libceres.so.1.12.0
 )
 
-
+find_package(glog 0.6.0 REQUIRED)
 target_include_directories(${PROJECT_NAME} PUBLIC "${ze_ceres_backend_SOURCE_DIR}/include" "${CERES_INCLUDE_DIR}")
 message("CERES at : ${CERES_INCLUDE_DIR}")
-target_link_libraries(${PROJECT_NAME} PUBLIC "ze_common" "ze_vio_common" "${CERES_LIBRARIES}" "ze_vio_frontend")
+target_link_libraries(${PROJECT_NAME} PUBLIC "ze_common" "ze_vio_common" "${CERES_LIBRARIES}" "ze_vio_frontend" "glog::glog")

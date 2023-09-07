@@ -69,7 +69,7 @@ namespace ze {
 
 // -----------------------------------------------------------------------------
 FrontendBase::FrontendBase()
-  : rig_(cameraRigFromGflags())
+  : rig_(cameraRigFromYaml("/home/nrad/rpg_ultimate_slam-slambench/imp/sensors.yaml"))
   , imu_integrator_(std::make_shared<ImuIntegrator>())
   , thread_pool_(rig_->size())
   , T_C_B_(rig_->T_C_B_vec())
@@ -367,12 +367,12 @@ void FrontendBase::processData(
   timers_[Timer::wait_time].stop();
   auto t_tot = timers_[Timer::total_time].timeScope();
 
-#ifdef ZE_VIO_LIMITED
-  if (limitNumberOfFrames(5000))
-  {
-    return;
-  }
-#endif
+  #ifdef ZE_VIO_LIMITED
+    if (limitNumberOfFrames(5000))
+    {
+      return;
+    }
+  #endif
 
   motion_type_ = VioMotionType::NotComputed;
   CHECK(!imu_stamps_vec.empty()) << "There are no IMU stamps";
@@ -413,6 +413,7 @@ void FrontendBase::processData(
   Transformation T_Bkm1_Bk;
   if (states_.nframeKm1())
   {
+    std::cout<<"[DEGUB] Found handle to frame k-1\n";
     if (!imu_stamps_vec.empty() && imu_stamps_vec.at(0).size() > 0)
     {
       Vector3 v_W = states_.v_W(states_.nframeHandleK());
@@ -443,8 +444,8 @@ void FrontendBase::processData(
   // Refactor this calculation, what if the denominator is 0, negative, etc...
   // What happens when you get only one event... Then denom is 0..
   real_t event_rate = n_events_for_noise_detection /
-         (events_ptr->back().ts -
-          events_ptr->at(events_ptr->size()-n_events_for_noise_detection).ts).ToS();
+        (double)(events_ptr->back().ts.ToNs() -
+          events_ptr->at(events_ptr->size()-n_events_for_noise_detection).ts.ToNs())/1000000000.0;
 
   if (event_rate < FLAGS_noise_event_rate)
   {
@@ -679,8 +680,8 @@ void FrontendBase::processData(
     // using the last x events! If you take the events in a ceratain fixed time
     // frame (as was done before), then what happens if there are no events...
     real_t event_rate = n_events_for_noise_detection /
-        (events_ptr->back().ts -
-          events_ptr->at(events_ptr->size()-n_events_for_noise_detection).ts).ToS();
+        (double)(events_ptr->back().ts.ToNs() -
+          events_ptr->at(events_ptr->size()-n_events_for_noise_detection).ts.ToNs())/1000000000.0;
 
 
     // Only draw a new event image if the rate of events is sufficiently high
